@@ -38,7 +38,7 @@
           if($destinations->num_rows > 0) {
             while($row = $destinations->fetch_assoc()){
               ?>
-              <option values="<?php echo $row['Package_ID'];?>"  <?php echo isset($_REQUEST['package']) && $row['Package_ID'] == $_REQUEST['package'] ? 'selected' : '';?>><?php echo $row['Destination']; ?> 
+              <option value="<?php echo $row['Package_ID'];?>"  <?php echo isset($_REQUEST['package']) && $row['Package_ID'] == $_REQUEST['package'] ? 'selected' : '';?>><?php echo $row['Destination']; ?> 
               </option>
               <?php 
             }
@@ -48,50 +48,64 @@
       </div>
 
       <div class="form-group">
-     <label for="destination">Pickup Location:</label>
-     <input class="form-control" id="Pickup" name="Pickup" placeholder="Enter Pickup Location" type="text" maxlength="70" value="<?php if(isset($_POST['Pickup']))echo $_POST['Pickup'];?>" Required />
-   </div>
+       <label for="destination">Pickup Location:</label>
+       <input class="form-control" id="Pickup" name="Pickup" placeholder="Enter Pickup Location" type="text" maxlength="70" value="<?php if(isset($_POST['Pickup']))echo $_POST['Pickup'];?>" Required />
+     </div>
 
-    </div>
+   </div>
 
 
    <div class="bootstrap-iso">
-   <div class="col-md-4 col-sm-4 col-xs-12">
+     <div class="col-md-4 col-sm-4 col-xs-12">
 
-     <div class="form-group ">
-      <label class="control-label" for="date">
-        From:
-      </label>
-      <div class="input-group">
-       <div class="input-group-addon">
-        <i class="fa fa-calendar">
-        </i>
+       <div class="form-group ">
+        <label class="control-label" for="date">
+          From:
+        </label>
+        <div class="input-group">
+         <div class="input-group-addon">
+          <i class="fa fa-calendar">
+          </i>
+        </div>
+        <input class="form-control" id="Fdate" name="Fdate" placeholder="MM/DD/YYYY" type="text" maxlength="10" value="<?php if(isset($_POST['Fdate']))echo $_POST['Fdate'];?>"/ Required>
       </div>
-      <input class="form-control" id="Fdate" name="Fdate" placeholder="MM/DD/YYYY" type="text" maxlength="10" value="<?php if(isset($_POST['Fdate']))echo $_POST['Fdate'];?>"/ Required>
     </div>
   </div>
-   </div>
-   <div class="col-md-4 col-sm-4 col-xs-12">
+  <div class="col-md-4 col-sm-4 col-xs-12">
 
-     <div class="form-group ">
-      <label class="control-label " for="date">
-       To
-     </label>
-     <div class="input-group">
-       <div class="input-group-addon">
-        <i class="fa fa-calendar">
-        </i>
-      </div>
-      <input class="form-control" id="date" name="Tdate" placeholder="MM/DD/YYYY" type="text" maxlength="10"  value="<?php if(isset($_POST['Tdate']))echo $_POST['Tdate'];?>" Required />
+   <div class="form-group ">
+    <label class="control-label " for="date">
+     To
+   </label>
+   <div class="input-group">
+     <div class="input-group-addon">
+      <i class="fa fa-calendar">
+      </i>
     </div>
+    <input class="form-control" id="date" name="Tdate" placeholder="MM/DD/YYYY" type="text" maxlength="10"  value="<?php if(isset($_POST['Tdate']))echo $_POST['Tdate'];?>" Required />
   </div>
-   </div>
 </div>
 
-    <div class="col-md-8 align-right">
-      <button class="btn btn-primary" type="submit" name="submit" id="submit">Submit</button>
-    </div>
+
+<div class="form-group price">
+  <label>Total Price:</label>
+  <div class="input-group">
+   <div class="input-group-addon">
+    <i class="fa fa-dollar">
+
+    </i>
   </div>
+  <input class="form-control value" id="price" name="price" type="text" maxlength="10"  value="<?php if(isset($_POST['Tdate']))echo $_POST['Tdate'];?>" Required />
+</div>
+<!-- <p class="price"><span class="currency">P</span><span class="value"></span></p> -->
+</div>
+</div>
+</div>
+
+<div class="col-md-8 align-right">
+  <button class="btn btn-primary" type="submit" name="submit" id="submit" disabled>Submit</button>
+</div>
+</div>
 </div>
 
 </div>
@@ -104,6 +118,24 @@
 
 <script>
   $(document).ready(function(){
+
+    var package_price = 1100;
+
+    var packageId = $("#desti option:selected").val();
+    alert(packageId);
+    $.ajax({
+      type: "post",
+      url: "lib/getpackageprice.php",
+      data: {
+        packID: packageId
+      },
+      success: function(data){  
+        if(parseInt(data) != NaN){
+          package_price = data;
+        }            
+      }
+    });
+
     var date_input1=$('input[name="Fdate"]');
         var date_input2=$('input[name="Tdate"]'); //our date input has the name "date"
         var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
@@ -112,14 +144,37 @@
           container: container,
           todayHighlight: true,
           autoclose: true,
-        })
+        });
         date_input2.datepicker({
           format: 'mm/dd/yyyy',
           container: container,
           todayHighlight: true,
           autoclose: true,
-        })
-      })
+        });
+        var days = 0;
+
+        $('input[name="Fdate"], input[name="Tdate"]').on('change', function(){  
+          var a = moment(date_input1.val());
+          var b = moment(date_input2.val());
+          days = b.diff(a, 'days');
+          console.log(days);
+          if(date_input1.val() != "" && date_input2.val() != ""){
+            var price = computePricing();
+            $(".price .value").val(price <= 0 ? "Invalid Dates" : price);
+            var theprice = $(".price .value").val();
+            if(theprice == "Invalid Dates" || theprice == ""){
+              $("#submit").attr("disabled", "disabled");   
+            }else{      
+              $("#submit").removeAttr("disabled");     
+            }
+          }
+        });
+
+        function computePricing(){
+          return days * package_price;
+        }
+
+      });
     </script>
 
 

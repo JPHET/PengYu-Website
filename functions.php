@@ -21,6 +21,8 @@ function getFooterAssets(){
 
     <!-- Custom JavaScript for this theme -->
     <script src="js/scrolling-nav.js"></script>
+    <!-- Date and Time Manager -->
+    <script src="js/moment.js"></script>
 <?php
 }
 ?>
