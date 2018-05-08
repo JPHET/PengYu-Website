@@ -1,6 +1,6 @@
 <?php 
-	Define('DB_USER','pengyuadmin');
-	Define('DB_PASSWORD', 'pengyu');
+	Define('DB_USER','root');
+	Define('DB_PASSWORD', '');
 	define('DB_HOST', 'localhost');
 	define('DB_NAME', 'pengyu');
 	

@@ -46,26 +46,16 @@
           ?>
         </select>
       </div>
+
+      <div class="form-group">
+     <label for="destination">Pickup Location:</label>
+     <input class="form-control" id="Pickup" name="Pickup" placeholder="Enter Pickup Location" type="text" maxlength="70" value="<?php if(isset($_POST['Pickup']))echo $_POST['Pickup'];?>" Required />
+   </div>
+
     </div>
-  </div>
-</div>
 
 
-<div class="container">
-     <div class="row">
-      <div class="col-md-8">
-       <div class="form-group">
-         <label for="destination">Pickup Location:</label>
-         <input class="form-control" id="Pickup" name="Pickup" placeholder="Enter Pickup Location" type="text" maxlength="70" value="<?php if(isset($_POST['Pickup']))echo $_POST['Pickup'];?>" Required />
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<div class="bootstrap-iso">
- <div class="container">
-  <div class="row">
+   <div class="bootstrap-iso">
    <div class="col-md-4 col-sm-4 col-xs-12">
 
      <div class="form-group ">
@@ -80,35 +70,30 @@
       <input class="form-control" id="Fdate" name="Fdate" placeholder="MM/DD/YYYY" type="text" maxlength="10" value="<?php if(isset($_POST['Fdate']))echo $_POST['Fdate'];?>"/ Required>
     </div>
   </div>
-</div>
+   </div>
+   <div class="col-md-4 col-sm-4 col-xs-12">
 
-<div class="col-md-4 col-sm-4 col-xs-12">
- <div class="form-group ">
-  <label class="control-label " for="date">
-   To
- </label>
- <div class="input-group">
-   <div class="input-group-addon">
-    <i class="fa fa-calendar">
-    </i>
-  </div>
-  <input class="form-control" id="date" name="Tdate" placeholder="MM/DD/YYYY" type="text" maxlength="10"  value="<?php if(isset($_POST['Tdate']))echo $_POST['Tdate'];?>" Required />
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-
-<div class="container " id="submitbutton">
-  <div class="row">
-    <div class="col-md-4">
-
+     <div class="form-group ">
+      <label class="control-label " for="date">
+       To
+     </label>
+     <div class="input-group">
+       <div class="input-group-addon">
+        <i class="fa fa-calendar">
+        </i>
+      </div>
+      <input class="form-control" id="date" name="Tdate" placeholder="MM/DD/YYYY" type="text" maxlength="10"  value="<?php if(isset($_POST['Tdate']))echo $_POST['Tdate'];?>" Required />
     </div>
-    <div class="col-md-4 align-right">
+  </div>
+   </div>
+</div>
+
+    <div class="col-md-8 align-right">
       <button class="btn btn-primary" type="submit" name="submit" id="submit">Submit</button>
     </div>
   </div>
+</div>
+
 </div>
 </form>
 <?php getFooterAssets(); ?>
@@ -119,7 +104,7 @@
 
 <script>
   $(document).ready(function(){
-        var date_input1=$('input[name="Fdate"]');
+    var date_input1=$('input[name="Fdate"]');
         var date_input2=$('input[name="Tdate"]'); //our date input has the name "date"
         var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
         date_input1.datepicker({
@@ -138,36 +123,36 @@
     </script>
 
 
-<?php
+    <?php
 
-if (isset($_POST['submit'])){
-session_start();
-if(!isset($_SESSION["pengyu_details"])){
-echo "<script type='text/javascript'>alert('Login Required.Please Login.');</script>";
-}else{ 
-$dest=$_POST['Desti'];
-$pl=$_POST['Pickup'];
-$Fd=$_POST['Fdate'];
-$Td=$_POST['Tdate'];
-$ID=$_SESSION['pengyu_details']['UserID'];
-$FN=$_SESSION['pengyu_details']['Fname'];
-$LN=$_SESSION['pengyu_details']['Lname'];
-$Cn=$_SESSION['pengyu_details']['ContactNumber'];
-$q="INSERT INTO reservation(ClientID,ClientFname,ClientLname, ContactNumber,Destination,DateofRent,EndofRent,PickupLocation,StartingPrice,TotalPrice)values('$ID','$FN','$LN','$dest','$Cn','$Fd','$Td','$pl','ss','ss');";
- $result=$dbcon->query($q);
+    if (isset($_POST['submit'])){
+      session_start();
+      if(!isset($_SESSION["pengyu_details"])){
+        echo "<script type='text/javascript'>alert('Login Required.Please Login.');</script>";
+      }else{ 
+        $dest=$_POST['Desti'];
+        $pl=$_POST['Pickup'];
+        $Fd=$_POST['Fdate'];
+        $Td=$_POST['Tdate'];
+        $ID=$_SESSION['pengyu_details']['UserID'];
+        $FN=$_SESSION['pengyu_details']['Fname'];
+        $LN=$_SESSION['pengyu_details']['Lname'];
+        $Cn=$_SESSION['pengyu_details']['ContactNumber'];
+        $q="INSERT INTO reservation(ClientID,ClientFname,ClientLname, ContactNumber,Destination,DateofRent,EndofRent,PickupLocation,StartingPrice,TotalPrice)values('$ID','$FN','$LN','$dest','$Cn','$Fd','$Td','$pl','ss','ss');";
+        $result=$dbcon->query($q);
         // to know result
-         if($result === TRUE){
-            echo "<script type='text/javascript'>alert('Registration Success!');</script>";
-            
-         }else{
+        if($result === TRUE){
+          echo "<script type='text/javascript'>alert('Registration Success!');</script>";
+
+        }else{
           echo "<script type='text/javascript'>alert('Registration failed due to system failure. Please try again. Sorxy for the inconvience.');</script>";
-         }
+        }
 
-            $dbcon->close();
-}
-}
+        $dbcon->close();
+      }
+    }
 
-?>
+    ?>
     <?php getFooter(); ?>
   </body>
 
