@@ -155,7 +155,7 @@
         $('input[name="Fdate"], input[name="Tdate"]').on('change', function(){  
           var a = moment(date_input1.val());
           var b = moment(date_input2.val());
-          days = b.diff(a, 'days');
+          days = b.diff(a, 'days') + 1;
           console.log(days);
           if(date_input1.val() != "" && date_input2.val() != ""){
             var price = computePricing();
