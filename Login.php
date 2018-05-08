@@ -68,8 +68,15 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
       //here
       $_SESSION['pengyu_details'] = $res->fetch_assoc();
       $dbcon->close();
-      header("location:admin.php");
-
+      if(isset($_SESSION['pengyu_details'])){
+          if($_SESSION['pengyu_details']['Access'] == '0'){
+            header('location: admin.php');
+          }else if($_SESSION['pengyu_details']['Access'] == '1'){
+            header('location: index.php');
+          }else{
+            header('location: index.php');
+          }
+      }
     }else{
       echo '<center><p>The email address and password could not be found<br>
       Not yet registered?&nbsp;<a href="registration.php">Click here&nbsp</a> to register!</p></center>'; 
