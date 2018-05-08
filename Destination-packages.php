@@ -122,7 +122,6 @@
     var package_price = 1100;
 
     var packageId = $("#desti option:selected").val();
-    alert(packageId);
     $.ajax({
       type: "post",
       url: "lib/getpackageprice.php",
