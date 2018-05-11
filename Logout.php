@@ -1,6 +1,6 @@
 <?php
 	session_start();
-	if(!isset($_SESSION['pengyu_access'])){
+	if(!isset($_SESSION['pengyu_details'])){
 		header("location:login.php");
 		exit();
 

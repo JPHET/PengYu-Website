@@ -23,6 +23,6 @@ function getFooterAssets(){
     <script src="js/scrolling-nav.js"></script>
     <!-- Date and Time Manager -->
     <script src="js/moment.js"></script>
-<?php
+    <?php
 }
 ?>

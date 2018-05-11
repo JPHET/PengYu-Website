@@ -30,7 +30,7 @@
        <h2>Pick your desired destination now</h2>
        <div class="form-group">
          <label for="destination">Destination:</label>
-         <select class="form-control" id="desti" name="Desti" values="<?php if(isset($_POST['Desti']))echo $_POST['Desti'];?>">
+         <select class="form-control" id="desti" name="Desti" values="<?php if(isset($_POST['Desti']))echo $_POST['Desti'] ;?>">
           <option>Choose destination</option>
           <?php
           $sql = "SELECT * from packages";
@@ -95,7 +95,7 @@
 
     </i>
   </div>
-  <input class="form-control value" id="price" name="price" type="text" maxlength="10"  value="<?php if(isset($_POST['Tdate']))echo $_POST['Tdate'];?>" Required />
+  <input class="form-control value" id="price" name="price" type="text" maxlength="10"  value="<?php if(isset($_POST['price']))echo $_POST['price'];?>" Required />
 </div>
 <!-- <p class="price"><span class="currency">P</span><span class="value"></span></p> -->
 </div>
@@ -103,7 +103,7 @@
 </div>
 
 <div class="col-md-8 align-right">
-  <button class="btn btn-primary" type="submit" name="submit" id="submit" disabled>Submit</button>
+  <button class="btn btn-primary" type="submit" name="submit" id="submit" disabled method="post">Submit</button>
 </div>
 </div>
 </div>
@@ -182,17 +182,32 @@
     if (isset($_POST['submit'])){
       session_start();
       if(!isset($_SESSION["pengyu_details"])){
-        echo "<script type='text/javascript'>alert('Login Required.Please Login.');</script>";
+        header('Location: Login.php');
+        echo "<script type='text/javascript'>alert('Login Required. Please Login.');</script>";
+        echo "<script> location.href='Login.php'; </script>";
+        exit;
+
       }else{ 
+        $TP=$_POST['price'];
         $dest=$_POST['Desti'];
         $pl=$_POST['Pickup'];
         $Fd=$_POST['Fdate'];
         $Td=$_POST['Tdate'];
+        $ST=$_REQUEST['package']['StartingPrice'];
         $ID=$_SESSION['pengyu_details']['UserID'];
         $FN=$_SESSION['pengyu_details']['Fname'];
         $LN=$_SESSION['pengyu_details']['Lname'];
         $Cn=$_SESSION['pengyu_details']['ContactNumber'];
-        $q="INSERT INTO reservation(ClientID,ClientFname,ClientLname, ContactNumber,Destination,DateofRent,EndofRent,PickupLocation,StartingPrice,TotalPrice)values('$ID','$FN','$LN','$dest','$Cn','$Fd','$Td','$pl','ss','ss');";
+
+        $q = "SELECT * from packages where Package_ID = $dest";
+        $package = $dbcon->query($q);
+        $startPrice = 0;
+        if($package->num_rows > 0){
+          $row = $package->fetch_assoc();
+          $startPrice = $row["Starting_Price"];
+          $destination=$row["Destination"];
+        }
+        $q="INSERT INTO reservation(ClientID,ClientFname,ClientLname, ContactNumber,Destination,DateofRent,EndofRent,PickupLocation,StartingPrice,TotalPrice,Status)values('$ID','$FN','$LN','$Cn','$destination','$Fd','$Td','$pl', $startPrice,'$TP','1');";
         $result=$dbcon->query($q);
         // to know result
         if($result === TRUE){
@@ -205,8 +220,8 @@
         $dbcon->close();
       }
     }
-
     ?>
+
     <?php getFooter(); ?>
   </body>
 

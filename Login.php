@@ -28,7 +28,7 @@
      <form action="" method="post">
        <div class="form-group">
          <label for="email">Email:</label>
-         <input type="email" maxlength="20" class="form-control" id="email" placeholder="Enter email" name="lemail" value="<?php if (isset($_POST['email'])) echo $_POST['email']; ?>" required>
+         <input type="email" class="form-control" id="email" placeholder="Enter email" name="lemail" value="<?php if (isset($_POST['email'])) echo $_POST['email']; ?>" required>
        </div>
        <div class="form-group">
         <label for="pwd">Password:</label>
@@ -69,17 +69,16 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
       $_SESSION['pengyu_details'] = $res->fetch_assoc();
       $dbcon->close();
       if(isset($_SESSION['pengyu_details'])){
-          if($_SESSION['pengyu_details']['Access'] == '0'){
-            header('location: admin.php');
-          }else if($_SESSION['pengyu_details']['Access'] == '1'){
-            header('location: index.php');
-          }else{
-            header('location: index.php');
-          }
+        if($_SESSION['pengyu_details']['Access'] == '0'){
+          header('location: admin.php');
+        }else if($_SESSION['pengyu_details']['Access'] == '1'){
+          header('location: index.php');
+        }else{
+          header('location: index.php');
+        }
       }
     }else{
-      echo '<center><p>The email address and password could not be found<br>
-      Not yet registered?&nbsp;<a href="registration.php">Click here&nbsp</a> to register!</p></center>'; 
+      echo "<script type='text/javascript'>alert('Password not found. Please try again.');</script>";
     }
   }else{
     echo '<h4><p id="red"> Please try again. </p></h4>';

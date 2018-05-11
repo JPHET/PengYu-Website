@@ -42,11 +42,11 @@
     $count = $dbcon->query($sql)->fetch_assoc()['COUNT(*)'];
     $pages = ceil($count/6);
     for ($i=1; $i <= $pages; $i++) {  
-    ?>
-    <li class="page-item">
-      <a class="page-link" href="javascript:void(0)" ><?php echo $i; ?></a>
-    </li>
-    <?php
+      ?>
+      <li class="page-item">
+        <a class="page-link" href="javascript:void(0)" ><?php echo $i; ?></a>
+      </li>
+      <?php
     }
     ?>
     <li class="page-item next">
@@ -65,7 +65,7 @@
   $(document).ready(function(){
     $("#content").addClass("fadeIn");
     $("#content").load("lib/dest-contents.php?page=1");
-      $('.pagination .page-item:nth-child(2)').addClass('active');
+    $('.pagination .page-item:nth-child(2)').addClass('active');
     $('.page-link').click(function(){     
      var page = $(this).text();
      $("#content").removeClass("fadeIn");
